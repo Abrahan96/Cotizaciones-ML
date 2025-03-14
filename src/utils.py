@@ -19,3 +19,7 @@ def insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtota
         "total": total
     }
     supabase.table("cotizaciones").insert(data).execute()
+    
+def obtener_cotizaciones():
+    response = supabase.table("cotizaciones").select("*").execute()
+    return response.data
