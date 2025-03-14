@@ -24,4 +24,4 @@ def obtener_cotizaciones():
     response = supabase.table("cotizaciones").select("*").execute()
     return response.data
 
-
+print(supabase)

@@ -1,5 +1,6 @@
 import streamlit as st
 from utils import insertar_cotizacion
+from utils import obtener_cotizaciones
 
 st.title("Cotización ML")
 
@@ -18,5 +19,13 @@ st.write("Total: ", round(total, 2))
 if st.button("Guardar Cotización"):
     insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total)
     st.success("Cotización guardada con éxito ✅")
+    
+# Llamamos a las cotizaciones desde Supabase
+cotizaciones = obtener_cotizaciones()
+
+# Mostramos los datos en una tabla
+st.write("### Historial de Cotizaciones")
+st.dataframe(cotizaciones)
+
 
 
