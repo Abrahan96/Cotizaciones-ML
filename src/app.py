@@ -27,5 +27,3 @@ cotizaciones = obtener_cotizaciones()
 st.write("### Historial de Cotizaciones")
 st.dataframe(cotizaciones)
 
-
-
