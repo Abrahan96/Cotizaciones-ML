@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from src.utils import insertar_cotizacion, obtener_cotizaciones
+from utils import insertar_cotizacion, obtener_cotizaciones
 
 # Interfaz Streamlit
 st.title("💻 Cotizaciones - Supabase 🚀")
