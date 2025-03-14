@@ -19,7 +19,7 @@ st.write("Total: ", round(total, 2))
 if st.button("Guardar Cotización"):
     insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total)
     st.success("Cotización guardada con éxito ✅")
-    st.experimental_rerun()
+    st.rerun()
 
 
 # Llamamos a las cotizaciones desde Supabase
