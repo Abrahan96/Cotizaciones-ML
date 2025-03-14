@@ -10,7 +10,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total):
     data = {
-        "numero_cotiz": numero_cotizacion,
+        "numero_cotizacion": numero_cotizacion,
         "cliente": cliente,
         "direccion": direccion,
         "mecanico": mecanico,
