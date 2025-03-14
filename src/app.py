@@ -29,7 +29,7 @@ cotizaciones = obtener_cotizaciones()
 st.write("### Historial de Cotizaciones")
 if cotizaciones:
     for cotizacion in cotizaciones:
-        with st.expander(f"Cotización: {cotizacion['numero_cotiz']}"):
+        with st.expander(f"Cotización: {cotizacion['numero_cotizacion']}"):
             st.write(f"Cliente: {cotizacion['cliente']}")
             st.write(f"Dirección: {cotizacion['direccion']}")
             st.write(f"Mecánico: {cotizacion['mecanico']}")
