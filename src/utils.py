@@ -18,8 +18,10 @@ def insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtota
         "igv": igv,
         "total": total
     }
-    supabase.table("Cotizaciones-ML").insert(data).execute()
-    
+    supabase.table('"Cotizaciones-ML"').insert(data).execute()
+ # Obetner cotizaciones   
 def obtener_cotizaciones():
-    response = supabase.table("Cotizaciones-ML").select("*").execute()
+    response = supabase.table('"Cotizaciones-ML"').select("*").execute()
     return response.data
+
+#Prueba comentario
