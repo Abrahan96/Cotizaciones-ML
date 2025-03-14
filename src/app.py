@@ -1,5 +1,6 @@
 import streamlit as st
 from utils import insertar_cotizacion
+from utils import obtener_cotizaciones
 
 st.title("Cotización ML")
 
