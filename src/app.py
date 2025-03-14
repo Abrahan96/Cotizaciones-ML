@@ -1,30 +1,30 @@
 import streamlit as st
-import pandas as pd
-from utils import insertar_cotizacion, obtener_cotizaciones
+from utils import insertar_cotizacion
+from utils import obtener_cotizaciones
 
-# Interfaz Streamlit
-st.title("💻 Cotizaciones - Supabase 🚀")
+st.title("Cotización ML")
 
 # Formulario
-with st.form("form_cotizacion"):
-    numero_cotizacion = st.text_input("Número de Cotización")
-    cliente = st.text_input("Cliente")
-    direccion = st.text_input("Dirección")
-    mecanico = st.text_input("Mecánico")
-    subtotal = st.number_input("Subtotal", min_value=0.0)
-    igv = subtotal * 0.18
-    total = subtotal + igv
+numero_cotiz = st.text_input("Número de Cotización", value="ML-00001")
+cliente = st.text_input("Cliente")
+direccion = st.text_input("Dirección")
+mecanico = st.text_input("Mecánico")
+subtotal = st.number_input("Subtotal", min_value=0.0)
+igv = subtotal * 0.18
+total = subtotal + igv
 
-    submit = st.form_submit_button("💾 Guardar Cotización")
+st.write("IGV (18%): ", round(igv, 2))
+st.write("Total: ", round(total, 2))
 
-if submit:
-    insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total)
-    st.success("✅ Cotización guardada correctamente.")
+if st.button("Guardar Cotización"):
+    insertar_cotizacion(numero_cotiz, cliente, direccion, mecanico, subtotal, igv, total)
+    st.success("Cotización guardada con éxito ✅")
 
-# Mostrar datos
-st.subheader("📄 Cotizaciones Registradas")
+
+# Llamamos a las cotizaciones desde Supabase
 cotizaciones = obtener_cotizaciones()
 
-if cotizaciones:
-    df = pd.DataFrame(cotizaciones)
-    st.dataframe(df)
+# Mostramos los datos en una tabla
+st.write("### Historial de Cotizaciones")
+st.dataframe(cotizaciones)
+
