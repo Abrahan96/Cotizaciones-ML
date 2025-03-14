@@ -1,8 +1,6 @@
 import streamlit as st
-from utils import insertar_cotizacion
-from utils import obtener_cotizaciones
-from utils import actualizar_cotizacion
-from utils import eliminar_cotizacion
+from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion
+
 
 st.title("Cotización ML")
 
