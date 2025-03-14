@@ -8,20 +8,16 @@ SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 # Conexión
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-def insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total):
-    data = {
-        "numero_cotizacion": numero_cotizacion,
-        "cliente": cliente,
-        "direccion": direccion,
-        "mecanico": mecanico,
-        "subtotal": subtotal,
-        "igv": igv,
-        "total": total
-    }
-    supabase.table("cotizaciones").insert(data).execute()
-    
-def obtener_cotizaciones():
-    response = supabase.table("cotizaciones").select("*").execute()
-    return response.data
+data = {
+    "numero_cotizacion": "COT-001",
+    "cliente": "Juan Pérez",
+    "direccion": "Av. Los Robles 123",
+    "mecanico": "Carlos",
+    "subtotal": 100.0,
+    "igv": 18.0,
+    "total": 118.0
+}
 
-print(supabase)
+response = supabase.table("cotizaciones").insert(data).execute()
+print(response.data)
+
