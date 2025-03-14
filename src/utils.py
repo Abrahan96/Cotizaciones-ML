@@ -10,7 +10,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 def insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total):
     data = {
-        "numero_cotizacion": numero_cotizacion,
+        "numero_cotiz": numero_cotizacion,
         "cliente": cliente,
         "direccion": direccion,
         "mecanico": mecanico,
@@ -18,10 +18,10 @@ def insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtota
         "igv": igv,
         "total": total
     }
-    supabase.table('"Cotizaciones-ML"').insert(data).execute()
- # Obetner cotizaciones   
+    supabase.table("cotizaciones").insert(data).execute()
+    
 def obtener_cotizaciones():
-    response = supabase.table('"Cotizaciones-ML"').select("*").execute()
+    response = supabase.table("cotizaciones").select("*").execute()
     return response.data
 
-#Prueba comentario
+
