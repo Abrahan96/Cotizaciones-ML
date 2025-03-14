@@ -55,11 +55,11 @@ if cotizaciones:
                             "igv": nuevo_igv,
                             "total": nuevo_total
                         })
-                        st.experimental_rerun()
+                        st.rerun()
 
             # Eliminar cotización
             with col2:
                 if st.button("🗑️ Eliminar", key=f"delete_{cotizacion['id']}"):
                     eliminar_cotizacion(cotizacion['id'])
                     st.warning("Cotización eliminada 🗑️")
-                    st.experimental_rerun()
+                    st.rerun()
