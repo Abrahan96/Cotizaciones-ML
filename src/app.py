@@ -14,7 +14,14 @@ equipo = st.text_input("Equipo")
 marca = st.text_input("Marca")
 modelo = st.text_input("Modelo")
 fecha = st.date_input("Fecha")
-subtotal = st.number_input("Subtotal", min_value=0.0)
+if 'cotizacion' not in st.session_state:
+    st.session_state['cotizacion'] = {}
+subtotal = st.number_input(
+    "Subtotal",
+    min_value=0.0,
+    value=float(st.session_state['cotizacion'].get('subtotal', 0.0))
+)
+
 igv = subtotal * 0.18
 total = subtotal + igv
 
@@ -39,9 +46,9 @@ if cotizaciones:
             st.write(f"Ruc: {cotizacion['ruc']}")
             st.write(f"Dirección: {cotizacion['direccion']}")
             st.write(f"Mecánico: {cotizacion['mecanico']}")
-            st.write(f"Equipo:{cotizacion['equipo']}")
+            st.write(f"Equipo: {cotizacion['equipo']}")
             st.write(f"Marca: {cotizacion['marca']}")
-            st.write(f"Modelo:{cotizacion['modelo']}")
+            st.write(f"Modelo: {cotizacion['modelo']}")
             st.write(f"Fecha: {cotizacion['fecha']}")
             st.write(f"Subtotal: {cotizacion['subtotal']}")
             st.write(f"IGV: {cotizacion['igv']}")
