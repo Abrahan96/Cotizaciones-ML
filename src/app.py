@@ -23,13 +23,14 @@ subtotal = st.number_input(
 )
 if 'cotizacion_a_editar' in locals():
     nuevo_igv = round(subtotal * 0.18, 2)
-    nuevo_total = round(subtotal + nuevo_igv, 2)
+    nuevo_total = round( + nuevo_igv, 2)
 else:
     nuevo_igv = 0
     nuevo_total = 0
 
 igv = subtotal * 0.18
 total = subtotal + igv
+opciones_estado = ["Pendiente","Atendido","Rechazado"]
 
 st.write("IGV (18%): ", round(igv, 2))
 st.write("Total: ", round(total, 2))
