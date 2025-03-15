@@ -95,7 +95,8 @@ if st.session_state['modo_edicion']:
     opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
 
     nuevo_estado = st.selectbox("Estado de la Cotización", opciones_estado,
-                                index=opciones_estado.index(cotizacion_a_editar['estado']))
+                                index=opciones_estado.index(cotizacion_a_editar.get('estado', 'Pendiente')) if cotizacion_a_editar.get('estado') in opciones_estado else 0)
+
 
     if st.button("Actualizar Cotización"):
         actualizar_cotizacion(cotizacion_a_editar['id'], {
