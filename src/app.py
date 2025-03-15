@@ -87,29 +87,38 @@ if st.session_state['modo_edicion']:
     nueva_fecha = st.date_input("Nueva Fecha", value=cotizacion_a_editar['fecha'])
     nuevo_subtotal = st.number_input("Nuevo Subtotal", min_value=0.0, value=float(cotizacion_a_editar['subtotal']))
     
-    nuevo_igv = round(nuevo_subtotal * 0.18, 2)
-    nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
-    
-    if st.button("Actualizar Cotización"):
-        actualizar_cotizacion(cotizacion_a_editar['id'], {
-            "cliente": nuevo_cliente,
-            "ruc": nuevo_ruc,
-            "direccion": nueva_direccion,
-            "mecanico": nuevo_mecanico,
-            "equipo": nuevo_equipo,
-            "marca": nueva_marca,
-            "modelo": nuevo_modelo,
-            "fecha": nueva_fecha,
-            "subtotal": nuevo_subtotal,
-            "igv": nuevo_igv,
-            "total": nuevo_total
-        })
-        st.success("✅ Cotización actualizada con éxito")
-        
-        # Reseteamos el estado
-        st.session_state['modo_edicion'] = False
-        st.session_state['id_cotizacion_editar'] = None
-        st.rerun()
+nuevo_igv = round(nuevo_subtotal * 0.18, 2)
+nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
+
+# Opciones de estado
+opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
+
+# Obtener el estado actual de la cotización
+nuevo_estado = st.selectbox("Estado de la Cotización", opciones_estado,
+                            index=opciones_estado.index(cotizacion_a_editar['estado']))
+
+if st.button("Actualizar Cotización"):
+    actualizar_cotizacion(cotizacion_a_editar['id'], {
+        "cliente": nuevo_cliente,
+        "ruc": nuevo_ruc,
+        "direccion": nueva_direccion,
+        "mecanico": nuevo_mecanico,
+        "equipo": nuevo_equipo,
+        "marca": nueva_marca,
+        "modelo": nuevo_modelo,
+        "fecha": nueva_fecha,
+        "subtotal": nuevo_subtotal,
+        "igv": nuevo_igv,
+        "total": nuevo_total,
+        "estado": nuevo_estado  # Aquí agregamos el nuevo estado
+    })
+
+    st.success("✅ Cotización actualizada con éxito")
+
+    # Reseteamos el estado
+    st.session_state['modo_edicion'] = False
+    st.session_state['id_cotizacion_editar'] = None
+    st.rerun()
 
     # Botón para cancelar edición
     if st.button("Cancelar"):
