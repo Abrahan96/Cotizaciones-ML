@@ -7,8 +7,13 @@ st.title("Cotización ML")
 # Formulario
 numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
 cliente = st.text_input("Cliente")
+ruc = st.text_input("Ruc")
 direccion = st.text_input("Dirección")
 mecanico = st.text_input("Mecánico")
+equipo = st.text_input("Equipo")
+marca = st.text_input("Marca")
+modelo = st.text_input("Modelo")
+fecha = st.date_input("Fecha")
 subtotal = st.number_input("Subtotal", min_value=0.0)
 igv = subtotal * 0.18
 total = subtotal + igv
@@ -31,8 +36,13 @@ if cotizaciones:
     for cotizacion in cotizaciones:
         with st.expander(f"Cotización: {cotizacion['numero_cotizacion']}"):
             st.write(f"Cliente: {cotizacion['cliente']}")
+            st.write(f"Ruc: {cotizacion['ruc']}")
             st.write(f"Dirección: {cotizacion['direccion']}")
             st.write(f"Mecánico: {cotizacion['mecanico']}")
+            st.write(f"Equipo:{cotizacion['equipo']}")
+            st.write(f"Marca: {cotizacion['marca']}")
+            st.write(f"Modelo:{cotizacion['modelo']}")
+            st.write(f"Fecha: {cotizacion['fecha']}")
             st.write(f"Subtotal: {cotizacion['subtotal']}")
             st.write(f"IGV: {cotizacion['igv']}")
             st.write(f"Total: {cotizacion['total']}")
