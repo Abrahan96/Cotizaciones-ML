@@ -20,20 +20,12 @@ fecha = st.date_input("Fecha")
 if 'cotizacion' not in st.session_state:
     st.session_state['cotizacion'] = {}
 
-subtotal = st.number_input(
-    "Subtotal",
-    min_value=0.0,
-    value=float(st.session_state['cotizacion'].get('subtotal', 0.0))
-)
+subtotal = st.number_input("Subtotal", min_value=0.0, value=float(st.session_state['cotizacion'].get('subtotal', 0.0)))
 
 igv = subtotal * 0.18
 total = subtotal + igv
 
-estado = st.selectbox(
-    "Estado de la cotización",
-    opciones_estado,
-    index=0
-)
+estado = st.selectbox("Estado de la cotización", opciones_estado, index=0)
 
 st.write("IGV (18%): ", round(igv, 2))
 st.write("Total: ", round(total, 2))
@@ -45,13 +37,6 @@ if st.button("Guardar Cotización"):
         st.rerun()
     except Exception as e:
         st.error(f"Error al guardar: {e}")
-
-# Inicializamos variables de edición
-if 'modo_edicion' not in st.session_state:
-    st.session_state['modo_edicion'] = False
-
-if 'id_cotizacion_editar' not in st.session_state:
-    st.session_state['id_cotizacion_editar'] = None
 
 # Obtener cotizaciones desde Supabase
 cotizaciones = obtener_cotizaciones()
@@ -76,8 +61,7 @@ if cotizaciones:
             col1, col2 = st.columns(2)
             with col1:
                 if st.button("📝 Editar", key=f"edit_{cotizacion['id']}"):
-                    st.session_state['modo_edicion'] = True
-                    st.session_state['id_cotizacion_editar'] = cotizacion['id']
+                    st.experimental_set_query_params(modo="editar", id_cotizacion=cotizacion['id'])
                     
             with col2:
                 if st.button("🗑️ Eliminar", key=f"delete_{cotizacion['id']}"):
@@ -88,9 +72,15 @@ if cotizaciones:
                     except Exception as e:
                         st.error(f"Error al eliminar: {e}")
 
-if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
+# Capturamos los parámetros de la URL para el modo edición
+parametros = st.experimental_get_query_params()
+modo_edicion = parametros.get('modo', [''])[0]
+id_cotizacion = parametros.get('id_cotizacion', [None])[0]
+
+# Si estamos en modo edición
+if modo_edicion == 'editar' and id_cotizacion:
     cotizacion_a_editar = next(
-        (c for c in cotizaciones if c['id'] == st.session_state['id_cotizacion_editar']),
+        (c for c in cotizaciones if str(c['id']) == id_cotizacion),
         None
     )
 
@@ -105,11 +95,9 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
         nueva_fecha = st.date_input("Nueva Fecha", value=cotizacion_a_editar['fecha'])
         nuevo_subtotal = st.number_input("Nuevo Subtotal", min_value=0.0, value=float(cotizacion_a_editar['subtotal']))
 
-        # Corrección del cálculo de IGV y Total
         nuevo_igv = round(nuevo_subtotal * 0.18, 2)
         nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
 
-        opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
         nuevo_estado = st.selectbox(
             "Estado de la Cotización",
             opciones_estado,
@@ -125,19 +113,17 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
                 "equipo": nuevo_equipo,
                 "marca": nueva_marca,
                 "modelo": nuevo_modelo,
-                "fecha": nueva_fecha.strftime("%Y-%m-%d"),  # Asegura el formato correcto
+                "fecha": nueva_fecha.strftime("%Y-%m-%d"),
                 "subtotal": nuevo_subtotal,
                 "igv": nuevo_igv,
                 "total": nuevo_total,
                 "estado": nuevo_estado
             })
-
             st.success("✅ Cotización actualizada con éxito")
-            st.session_state['modo_edicion'] = False
-            st.session_state['id_cotizacion_editar'] = None
+            st.experimental_set_query_params()
             st.rerun()
-    else:
-        st.error("No se encontró la cotización para editar.")
+
+
 
 
 
