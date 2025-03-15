@@ -143,7 +143,13 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
                 st.session_state['id_cotizacion_editar'] = None
                 st.rerun()
 
+cotizacion_a_editar = st.session_state.get("cotizacion_a_editar", None)
+
 if st.button("📄 Generar PDF"):
-    pdf_file = generar_pdf(cotizacion_a_editar)
-    with open(pdf_file, "rb") as f:
-        st.download_button("⬇️ Descargar PDF", f, file_name="cotizacion.pdf", mime="application/pdf")
+    if cotizacion_a_editar:
+        pdf_file = generar_pdf(cotizacion_a_editar)
+        with open(pdf_file, "rb") as f:
+            st.download_button("⬇️ Descargar PDF", f, file_name="cotizacion.pdf", mime="application/pdf")
+    else:
+        st.warning("No hay ninguna cotización seleccionada.")
+
