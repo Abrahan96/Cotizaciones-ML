@@ -18,7 +18,7 @@ def insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, eq
         "equipo": equipo,
         "marca": marca,
         "modelo": modelo,
-        "fecha": fecha,
+        "fecha": str(fecha),
         "subtotal": subtotal,
         "igv": igv,
         "total": total
