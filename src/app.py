@@ -22,7 +22,7 @@ st.write("IGV (18%): ", round(igv, 2))
 st.write("Total: ", round(total, 2))
 
 if st.button("Guardar Cotización"):
-    insertar_cotizacion(numero_cotizacion, cliente, direccion, mecanico, subtotal, igv, total)
+    insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total)
     st.success("Cotización guardada con éxito ✅")
     st.rerun()
 
