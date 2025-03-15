@@ -1,7 +1,6 @@
 import streamlit as st
 import sys
-sys.path.append("./src")
-
+import reportlab
 from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion, generar_pdf
 
 st.title("Cotización ML")
@@ -148,11 +147,11 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
 
 cotizacion_a_editar = st.session_state.get("cotizacion_a_editar", None)
 
-if st.button("📄 Generar PDF"):
-    if cotizacion_a_editar:
-        pdf_file = generar_pdf(cotizacion_a_editar)
-        with open(pdf_file, "rb") as f:
-            st.download_button("⬇️ Descargar PDF", f, file_name="cotizacion.pdf", mime="application/pdf")
-    else:
-        st.warning("No hay ninguna cotización seleccionada.")
+if 'cotizacion_a_editar' in locals() and cotizacion_a_editar:
+    pdf_file = generar_pdf(cotizacion_a_editar)
+    with open(pdf_file, "rb") as f:
+        st.download_button("⬇️ Descargar PDF", f, file_name="cotizacion.pdf", mime="application/pdf")
+else:
+    st.warning("❌ No hay ninguna cotización seleccionada.")
+
 
