@@ -3,8 +3,6 @@ from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizaci
 
 st.title("Cotización ML")
 
-# Lista de estados
-opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
 # Inicializar el estado de sesión
 if 'pagina' not in st.session_state:
     st.session_state['pagina'] = 'Formulario'
@@ -20,22 +18,6 @@ if st.sidebar.button("📋 Historial de Cotizaciones"):
 if st.sidebar.button("⏳ Cotizaciones Pendientes"):
     st.session_state['pagina'] = 'Pendientes'
 
-# Lógica para mostrar el contenido según el botón seleccionado
-if st.session_state['pagina'] == 'Formulario':
-    st.title("📝 Formulario de Cotización")
-    st.text_input("Número de Cotización")
-    st.text_input("Cliente")
-    st.text_input("RUC")
-    st.text_input("Dirección")
-    st.text_input("Mecánico")
-    st.text_input("Equipo")
-    st.text_input("Marca")
-    st.text_input("Modelo")
-    st.date_input("Fecha")
-    st.number_input("Subtotal", min_value=0.0, step=0.1)
-    st.selectbox("Estado de la Cotización", ["Pendiente", "Aprobada", "Rechazada"])
-    st.button("Guardar Cotización")
-
 elif st.session_state['pagina'] == 'Historial':
     st.title("📋 Historial de Cotizaciones")
     st.write("Aquí se mostrará el historial...")
@@ -44,7 +26,8 @@ elif st.session_state['pagina'] == 'Pendientes':
     st.title("⏳ Cotizaciones Pendientes")
     st.write("Aquí se mostrarán las cotizaciones pendientes...")
 
-
+# Lista de estados
+opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
 # Formulario
 numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
 cliente = st.text_input("Cliente")
