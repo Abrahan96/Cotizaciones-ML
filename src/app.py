@@ -6,12 +6,20 @@ st.title("Cotización ML")
 # Lista de estados
 opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
 
-# Apartados
+# Apartados interactivos
 st.sidebar.title("Apartados")
-st.sidebar.markdown("- 📄 Nueva Cotización")
-st.sidebar.markdown("- 📋 Historial de Cotizaciones")
-st.sidebar.markdown("- 🛠️ Editar Cotización")
-st.sidebar.markdown("- ❌ Eliminar Cotización")
+if st.sidebar.button("📄 Nueva Cotización"):
+    st.session_state['apartado'] = 'nueva_cotizacion'
+
+if st.sidebar.button("📋 Historial de Cotizaciones"):
+    st.session_state['apartado'] = 'historial'
+
+if st.sidebar.button("🛠️ Editar Cotización"):
+    st.session_state['apartado'] = 'editar'
+
+if st.sidebar.button("❌ Eliminar Cotización"):
+    st.session_state['apartado'] = 'eliminar'
+
 
 # Formulario
 numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
