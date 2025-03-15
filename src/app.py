@@ -1,7 +1,6 @@
 import streamlit as st
 from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion
 st.set_page_config(page_title="Gestión de Cotizaciones", layout="wide")
-st.set_page_config(page_title="Gestión de Cotizaciones", layout="wide")
 
 # Menú lateral
 st.sidebar.title("Menú de Navegación")
