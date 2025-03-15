@@ -1,5 +1,9 @@
 from supabase import create_client, Client
 import os
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import tempfile
+
 
 # Clave secreta de Supabase
 SUPABASE_URL = "https://eyemokwxswevabnuldej.supabase.co"
@@ -49,10 +53,6 @@ def actualizar_cotizacion(id_cotizacion, nuevos_datos):
 def eliminar_cotizacion(id_cotizacion):
     response = supabase.table("cotizaciones").delete().eq("id", id_cotizacion).execute()
     return response
-
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
-import tempfile
 
 def generar_pdf(cotizacion):
     # Crear un archivo temporal para el PDF

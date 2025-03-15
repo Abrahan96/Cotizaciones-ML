@@ -1,10 +1,5 @@
 import streamlit as st
 from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion, generar_pdf
-import sys
-import os
-
-sys.path.append(os.path.abspath('./src'))
-
 
 st.title("Cotización ML")
 
