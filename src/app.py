@@ -95,6 +95,8 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
         (c for c in cotizaciones if c['id'] == st.session_state['id_cotizacion_editar']),
         None
     )
+    st.session_state['cotizacion_a_editar'] = cotizacion_a_editar
+
 
     if cotizacion_a_editar:
         nuevo_cliente = st.text_input("Nuevo Cliente", value=cotizacion_a_editar['cliente'])
@@ -144,6 +146,9 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
                 st.session_state['modo_edicion'] = False
                 st.session_state['id_cotizacion_editar'] = None
                 st.rerun()
+
+if 'cotizacion_a_editar' not in st.session_state:
+    st.session_state['cotizacion_a_editar'] = None
 
 cotizacion_a_editar = st.session_state.get("cotizacion_a_editar", None)
 
