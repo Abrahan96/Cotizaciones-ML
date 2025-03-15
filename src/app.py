@@ -40,7 +40,7 @@ st.write("Total: ", round(total, 2))
 
 if st.button("Guardar Cotización"):
     try:
-        insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total)
+        insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total, estado)
         st.success("Cotización guardada con éxito ✅")
         st.rerun()
     except Exception as e:
