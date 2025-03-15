@@ -2,6 +2,7 @@ from supabase import create_client, Client
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import tempfile
+import reportlab
 
 
 # Clave secreta de Supabase
