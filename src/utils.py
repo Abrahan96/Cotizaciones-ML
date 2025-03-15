@@ -31,9 +31,19 @@ def obtener_cotizaciones():
     return response.data
 
 # ACTUALIZAR COTIZACIÓN
+
 def actualizar_cotizacion(id_cotizacion, nuevos_datos):
-    response = supabase.table("cotizaciones").update(nuevos_datos).eq("id", id_cotizacion).execute()
-    return response
+    try:
+        print(f"ID de Cotización a actualizar: {id_cotizacion}")
+        print(f"Datos a actualizar: {nuevos_datos}")
+
+        response = supabase.table("cotizaciones").update(nuevos_datos).eq("id", id_cotizacion).execute()
+
+        print(f"Respuesta de Supabase: {response}")
+        return response
+    except Exception as e:
+        print(f"Error al actualizar la cotización: {e}")
+        return None
 
 # ELIMINAR COTIZACIÓN
 def eliminar_cotizacion(id_cotizacion):

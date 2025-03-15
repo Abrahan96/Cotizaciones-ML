@@ -88,8 +88,11 @@ if cotizaciones:
                     except Exception as e:
                         st.error(f"Error al eliminar: {e}")
 
-if st.session_state['modo_edicion']:
-    cotizacion_a_editar = next((c for c in cotizaciones if c['id'] == st.session_state['id_cotizacion_editar']), None)
+if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
+    cotizacion_a_editar = next(
+        (c for c in cotizaciones if c['id'] == st.session_state['id_cotizacion_editar']),
+        None
+    )
 
     if cotizacion_a_editar:
         nuevo_cliente = st.text_input("Nuevo Cliente", value=cotizacion_a_editar['cliente'])
@@ -102,11 +105,16 @@ if st.session_state['modo_edicion']:
         nueva_fecha = st.date_input("Nueva Fecha", value=cotizacion_a_editar['fecha'])
         nuevo_subtotal = st.number_input("Nuevo Subtotal", min_value=0.0, value=float(cotizacion_a_editar['subtotal']))
 
+        # Corrección del cálculo de IGV y Total
         nuevo_igv = round(nuevo_subtotal * 0.18, 2)
         nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
 
-        nuevo_estado = st.selectbox("Estado de la Cotización", opciones_estado,
-                                    index=opciones_estado.index(cotizacion_a_editar.get('estado', 'Pendiente')) if cotizacion_a_editar.get('estado') in opciones_estado else 0)
+        opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
+        nuevo_estado = st.selectbox(
+            "Estado de la Cotización",
+            opciones_estado,
+            index=opciones_estado.index(cotizacion_a_editar['estado']) if cotizacion_a_editar['estado'] in opciones_estado else 0
+        )
 
         if st.button("Actualizar Cotización"):
             actualizar_cotizacion(cotizacion_a_editar['id'], {
@@ -117,13 +125,18 @@ if st.session_state['modo_edicion']:
                 "equipo": nuevo_equipo,
                 "marca": nueva_marca,
                 "modelo": nuevo_modelo,
-                "fecha": nueva_fecha,
+                "fecha": nueva_fecha.strftime("%Y-%m-%d"),  # Asegura el formato correcto
                 "subtotal": nuevo_subtotal,
                 "igv": nuevo_igv,
                 "total": nuevo_total,
                 "estado": nuevo_estado
             })
+
             st.success("✅ Cotización actualizada con éxito")
+            st.session_state['modo_edicion'] = False
+            st.session_state['id_cotizacion_editar'] = None
             st.rerun()
+    else:
+        st.error("No se encontró la cotización para editar.")
 
 
