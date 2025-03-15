@@ -49,3 +49,33 @@ def actualizar_cotizacion(id_cotizacion, nuevos_datos):
 def eliminar_cotizacion(id_cotizacion):
     response = supabase.table("cotizaciones").delete().eq("id", id_cotizacion).execute()
     return response
+
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import tempfile
+
+def generar_pdf(cotizacion):
+    # Crear un archivo temporal para el PDF
+    temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
+    file_path = temp_file.name
+    
+    # Crear el PDF
+    c = canvas.Canvas(file_path, pagesize=letter)
+    c.setFont("Helvetica", 12)
+    c.drawString(30, 750, "🔧 COTIZACIÓN - MANTENIMIENTO DE MONTACARGAS 🔧")
+    c.drawString(30, 730, f"Cliente: {cotizacion['cliente']}")
+    c.drawString(30, 710, f"RUC: {cotizacion['ruc']}")
+    c.drawString(30, 690, f"Dirección: {cotizacion['direccion']}")
+    c.drawString(30, 670, f"Mecánico: {cotizacion['mecanico']}")
+    c.drawString(30, 650, f"Equipo: {cotizacion['equipo']}")
+    c.drawString(30, 630, f"Marca: {cotizacion['marca']}")
+    c.drawString(30, 610, f"Modelo: {cotizacion['modelo']}")
+    c.drawString(30, 590, f"Fecha: {cotizacion['fecha']}")
+    c.drawString(30, 570, f"Subtotal: S/. {cotizacion['subtotal']}")
+    c.drawString(30, 550, f"IGV (18%): S/. {cotizacion['igv']}")
+    c.drawString(30, 530, f"Total: S/. {cotizacion['total']}")
+    c.drawString(30, 500, f"Estado: {cotizacion['estado']}")
+    
+    c.save()
+    return file_path
+

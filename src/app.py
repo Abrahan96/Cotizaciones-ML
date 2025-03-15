@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion
+from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion, generar_pdf
 
 st.title("Cotización ML")
 
@@ -142,3 +142,8 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
                 st.session_state['modo_edicion'] = False
                 st.session_state['id_cotizacion_editar'] = None
                 st.rerun()
+
+if st.button("📄 Generar PDF"):
+    pdf_file = generar_pdf(cotizacion_a_editar)
+    with open(pdf_file, "rb") as f:
+        st.download_button("⬇️ Descargar PDF", f, file_name="cotizacion.pdf", mime="application/pdf")
