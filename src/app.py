@@ -61,7 +61,12 @@ if cotizaciones:
             with col1:
                 if st.button("📝 Editar", key=f"edit_{cotizacion['id']}"):
                     nuevo_cliente = st.text_input("Nuevo Cliente", value=cotizacion['cliente'])
-                    nuevo_subtotal = st.number_input("Nuevo Subtotal", min_value=0.0, value=cotizacion['subtotal'])
+                    nuevo_subtotal = st.number_input(
+    "Nuevo Subtotal", 
+    min_value=0.0, 
+    value=float(cotizacion.get('subtotal', 0.0))  # Convertimos a float por si acaso
+)
+
                     nuevo_igv = round(nuevo_subtotal * 0.18, 2)
                     nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
                     
