@@ -23,7 +23,7 @@ def insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, eq
         "igv": igv,
         "total": total
     }
-    supabase.table("cotizaciones").insert(data).execute()
+    supabase.table("cotizaciones").insert([data]).execute()
     
 def obtener_cotizaciones():
     response = supabase.table("cotizaciones").select("*").execute()
