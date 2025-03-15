@@ -3,31 +3,9 @@ from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizaci
 
 st.title("Cotización ML")
 
-# Inicializar el estado de sesión
-if 'pagina' not in st.session_state:
-    st.session_state['pagina'] = 'Formulario'
-
-# Sidebar con botones para cambiar de sección
-st.sidebar.title("Apartados")
-if st.sidebar.button("📄 Formulario"):
-    st.session_state['pagina'] = 'Formulario'
-
-if st.sidebar.button("📋 Historial de Cotizaciones"):
-    st.session_state['pagina'] = 'Historial'
-
-if st.sidebar.button("⏳ Cotizaciones Pendientes"):
-    st.session_state['pagina'] = 'Pendientes'
-
-elif st.session_state['pagina'] == 'Historial':
-    st.title("📋 Historial de Cotizaciones")
-    st.write("Aquí se mostrará el historial...")
-
-elif st.session_state['pagina'] == 'Pendientes':
-    st.title("⏳ Cotizaciones Pendientes")
-    st.write("Aquí se mostrarán las cotizaciones pendientes...")
-
 # Lista de estados
 opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
+
 # Formulario
 numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
 cliente = st.text_input("Cliente")
