@@ -1,73 +1,50 @@
 import streamlit as st
 from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion
-st.set_page_config(page_title="Gestión de Cotizaciones", layout="wide")
 
-# Menú lateral
-st.sidebar.title("Menú de Navegación")
-opcion = st.sidebar.radio("Selecciona una opción:", ["Formulario de Cotización", "Historial de Cotizaciones", "Cotizaciones Pendientes"])
-if opcion == "Formulario de cotización":
-    st.title("Cotización ML")
+st.title("Cotización ML")
 
-    # Lista de estados
-    opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
+# Lista de estados
+opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
 
-    # Formulario
-    numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
-    cliente = st.text_input("Cliente")
-    ruc = st.text_input("Ruc")
-    direccion = st.text_input("Dirección")
-    mecanico = st.text_input("Mecánico")
-    equipo = st.text_input("Equipo")
-    marca = st.text_input("Marca")
-    modelo = st.text_input("Modelo")
-    fecha = st.date_input("Fecha")
+# Formulario
+numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
+cliente = st.text_input("Cliente")
+ruc = st.text_input("Ruc")
+direccion = st.text_input("Dirección")
+mecanico = st.text_input("Mecánico")
+equipo = st.text_input("Equipo")
+marca = st.text_input("Marca")
+modelo = st.text_input("Modelo")
+fecha = st.date_input("Fecha")
 
-    if 'cotizacion' not in st.session_state:
-        st.session_state['cotizacion'] = {}
+if 'cotizacion' not in st.session_state:
+    st.session_state['cotizacion'] = {}
 
-    subtotal = st.number_input(
+subtotal = st.number_input(
     "Subtotal",
     min_value=0.0,
     value=float(st.session_state['cotizacion'].get('subtotal', 0.0))
 )
 
-    igv = subtotal * 0.18
-    total = subtotal + igv
+igv = subtotal * 0.18
+total = subtotal + igv
 
-    estado = st.selectbox(
+estado = st.selectbox(
     "Estado de la cotización",
     opciones_estado,
     index=0
 )
 
-    st.write("IGV (18%): ", round(igv, 2))
-    st.write("Total: ", round(total, 2))
+st.write("IGV (18%): ", round(igv, 2))
+st.write("Total: ", round(total, 2))
 
-    if st.button("Guardar Cotización"):
-        try:
-            insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total, estado)
-            st.success("Cotización guardada con éxito ✅")
-            st.rerun()
-        except Exception as e:
-            st.error(f"Error al guardar: {e}")
-# Sección: Historial de Cotizaciones
-elif opcion == "Historial de Cotizaciones":
-    st.title("📜 Historial de Cotizaciones")
-    cotizaciones = obtener_cotizaciones()
-    if cotizaciones:
-        st.table(cotizaciones)
-    else:
-        st.warning("No hay cotizaciones registradas.")
-
-# Sección: Cotizaciones Pendientes
-elif opcion == "Cotizaciones Pendientes":
-    st.title("⏳ Cotizaciones Pendientes")
-    cotizaciones = obtener_cotizaciones()
-    pendientes = [c for c in cotizaciones if c["estado"] == "Pendiente"]
-    if pendientes:
-        st.table(pendientes)
-    else:
-        st.warning("No hay cotizaciones pendientes.")
+if st.button("Guardar Cotización"):
+    try:
+        insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total, estado)
+        st.success("Cotización guardada con éxito ✅")
+        st.rerun()
+    except Exception as e:
+        st.error(f"Error al guardar: {e}")
 
 # Inicializamos variables de edición
 if 'modo_edicion' not in st.session_state:
