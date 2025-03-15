@@ -21,6 +21,12 @@ subtotal = st.number_input(
     min_value=0.0,
     value=float(st.session_state['cotizacion'].get('subtotal', 0.0))
 )
+if 'cotizacion_a_editar' in locals():
+    nuevo_igv = round(subtotal * 0.18, 2)
+    nuevo_total = round(subtotal + nuevo_igv, 2)
+else:
+    nuevo_igv = 0
+    nuevo_total = 0
 
 igv = subtotal * 0.18
 total = subtotal + igv
