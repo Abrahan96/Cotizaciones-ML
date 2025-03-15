@@ -1,5 +1,55 @@
 import streamlit as st
 from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion
+st.set_page_config(page_title="Gestión de Cotizaciones", layout="wide")
+st.set_page_config(page_title="Gestión de Cotizaciones", layout="wide")
+
+# Menú lateral
+st.sidebar.title("Menú de Navegación")
+opcion = st.sidebar.radio("Selecciona una opción:", ["Formulario de Cotización", "Historial de Cotizaciones", "Cotizaciones Pendientes"])
+
+# Sección: Formulario de Cotización
+if opcion == "Formulario de Cotización":
+    st.title("📄 Formulario de Cotización")
+
+    cliente = st.text_input("Nombre del Cliente")
+    ruc = st.text_input("RUC")
+    direccion = st.text_input("Dirección")
+    mecanico = st.text_input("Mecánico")
+    equipo = st.text_input("Equipo")
+    marca = st.text_input("Marca")
+    modelo = st.text_input("Modelo")
+    fecha = st.date_input("Fecha de Cotización")
+    subtotal = st.number_input("Subtotal", min_value=0.0, format="%.2f")
+    igv = subtotal * 0.18
+    total = subtotal + igv
+    estado = st.selectbox("Estado de la cotización", ["Pendiente", "Aprobada", "Rechazada"])
+
+    st.write(f"**IGV (18%)**: {igv:.2f}")
+    st.write(f"**Total**: {total:.2f}")
+
+    if st.button("Guardar Cotización"):
+        insertar_cotizacion("001", cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total, estado)
+        st.success("Cotización guardada correctamente ✅")
+
+# Sección: Historial de Cotizaciones
+elif opcion == "Historial de Cotizaciones":
+    st.title("📜 Historial de Cotizaciones")
+    cotizaciones = obtener_cotizaciones()
+    if cotizaciones:
+        st.table(cotizaciones)
+    else:
+        st.warning("No hay cotizaciones registradas.")
+
+# Sección: Cotizaciones Pendientes
+elif opcion == "Cotizaciones Pendientes":
+    st.title("⏳ Cotizaciones Pendientes")
+    cotizaciones = obtener_cotizaciones()
+    pendientes = [c for c in cotizaciones if c["estado"] == "Pendiente"]
+    if pendientes:
+        st.table(pendientes)
+    else:
+        st.warning("No hay cotizaciones pendientes.")
+
 
 st.title("Cotización ML")
 
