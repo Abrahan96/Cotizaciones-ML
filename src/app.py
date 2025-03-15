@@ -73,7 +73,7 @@ if cotizaciones:
                         st.error(f"Error al eliminar: {e}")
 
 # Capturamos los parámetros de la URL para el modo edición
-parametros = params = st.query_params()
+parametros = st.query_params()
 modo_edicion = parametros.get('modo', [''])[0]
 id_cotizacion = parametros.get('id_cotizacion', [None])[0]
 
