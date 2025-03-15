@@ -6,6 +6,13 @@ st.title("Cotización ML")
 # Lista de estados
 opciones_estado = ["Pendiente", "Atendido", "Rechazado"]
 
+# Apartados
+st.sidebar.title("Apartados")
+st.sidebar.markdown("- 📄 Nueva Cotización")
+st.sidebar.markdown("- 📋 Historial de Cotizaciones")
+st.sidebar.markdown("- 🛠️ Editar Cotización")
+st.sidebar.markdown("- ❌ Eliminar Cotización")
+
 # Formulario
 numero_cotizacion = st.text_input("Número de Cotización", value="ML-00001")
 cliente = st.text_input("Cliente")
@@ -138,5 +145,6 @@ if 'modo_edicion' in st.session_state and st.session_state['modo_edicion']:
             st.rerun()
     else:
         st.error("No se encontró la cotización para editar.")
+
 
 
