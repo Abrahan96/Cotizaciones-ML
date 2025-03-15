@@ -76,8 +76,15 @@ if cotizaciones:
                     st.rerun()
 if st.session_state['modo_edicion']:
     cotizacion_a_editar = next(c for c in cotizaciones if c['id'] == st.session_state['id_cotizacion_editar'])
-    
+
     nuevo_cliente = st.text_input("Nuevo Cliente", value=cotizacion_a_editar['cliente'])
+    nuevo_ruc = st.text_input("Nuevo RUC", value=cotizacion_a_editar['ruc'])
+    nueva_direccion = st.text_input("Nueva Dirección", value=cotizacion_a_editar['direccion'])
+    nuevo_mecanico = st.text_input("Nuevo Mecánico", value=cotizacion_a_editar['mecanico'])
+    nuevo_equipo = st.text_input("Nuevo Equipo", value=cotizacion_a_editar['equipo'])
+    nueva_marca = st.text_input("Nueva Marca", value=cotizacion_a_editar['marca'])
+    nuevo_modelo = st.text_input("Nuevo Modelo", value=cotizacion_a_editar['modelo'])
+    nueva_fecha = st.date_input("Nueva Fecha", value=cotizacion_a_editar['fecha'])
     nuevo_subtotal = st.number_input("Nuevo Subtotal", min_value=0.0, value=float(cotizacion_a_editar['subtotal']))
     
     nuevo_igv = round(nuevo_subtotal * 0.18, 2)
@@ -86,6 +93,13 @@ if st.session_state['modo_edicion']:
     if st.button("Actualizar Cotización"):
         actualizar_cotizacion(cotizacion_a_editar['id'], {
             "cliente": nuevo_cliente,
+            "ruc": nuevo_ruc,
+            "direccion": nueva_direccion,
+            "mecanico": nuevo_mecanico,
+            "equipo": nuevo_equipo,
+            "marca": nueva_marca,
+            "modelo": nuevo_modelo,
+            "fecha": nueva_fecha,
             "subtotal": nuevo_subtotal,
             "igv": nuevo_igv,
             "total": nuevo_total
@@ -100,3 +114,4 @@ if st.session_state['modo_edicion']:
     # Botón para cancelar edición
     if st.button("Cancelar"):
         st.session_state['modo_edicion'] = False
+
