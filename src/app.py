@@ -33,6 +33,11 @@ if st.button("Guardar Cotización"):
     st.success("Cotización guardada con éxito ✅")
     st.rerun()
 
+if 'modo_edicion' not in st.session_state:
+    st.session_state['modo_edicion'] = False
+
+if 'id_cotizacion_editar' not in st.session_state:
+    st.session_state['id_cotizacion_editar'] = None
 
 # Llamamos a las cotizaciones desde Supabase
 cotizaciones = obtener_cotizaciones()
@@ -57,31 +62,41 @@ if cotizaciones:
             # BOTONES DE CRUD
             col1, col2 = st.columns(2)
             
-            # Actualizar cotización
+            # Botón para activar modo edición
             with col1:
                 if st.button("📝 Editar", key=f"edit_{cotizacion['id']}"):
-                    nuevo_cliente = st.text_input("Nuevo Cliente", value=cotizacion['cliente'])
-                    nuevo_subtotal = st.number_input(
-    "Nuevo Subtotal", 
-    min_value=0.0, 
-    value=float(cotizacion.get('subtotal', 0.0))  # Convertimos a float por si acaso
-)
-
-                    nuevo_igv = round(nuevo_subtotal * 0.18, 2)
-                    nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
+                    st.session_state['modo_edicion'] = True
+                    st.session_state['id_cotizacion_editar'] = cotizacion['id']
                     
-                    if st.button("Actualizar"):
-                        actualizar_cotizacion(cotizacion['id'], {
-                            "cliente": nuevo_cliente,
-                            "subtotal": nuevo_subtotal,
-                            "igv": nuevo_igv,
-                            "total": nuevo_total
-                        })
-                        st.rerun()
-
             # Eliminar cotización
             with col2:
                 if st.button("🗑️ Eliminar", key=f"delete_{cotizacion['id']}"):
                     eliminar_cotizacion(cotizacion['id'])
                     st.warning("Cotización eliminada 🗑️")
                     st.rerun()
+if st.session_state['modo_edicion']:
+    cotizacion_a_editar = next(c for c in cotizaciones if c['id'] == st.session_state['id_cotizacion_editar'])
+    
+    nuevo_cliente = st.text_input("Nuevo Cliente", value=cotizacion_a_editar['cliente'])
+    nuevo_subtotal = st.number_input("Nuevo Subtotal", min_value=0.0, value=float(cotizacion_a_editar['subtotal']))
+    
+    nuevo_igv = round(nuevo_subtotal * 0.18, 2)
+    nuevo_total = round(nuevo_subtotal + nuevo_igv, 2)
+    
+    if st.button("Actualizar Cotización"):
+        actualizar_cotizacion(cotizacion_a_editar['id'], {
+            "cliente": nuevo_cliente,
+            "subtotal": nuevo_subtotal,
+            "igv": nuevo_igv,
+            "total": nuevo_total
+        })
+        st.success("✅ Cotización actualizada con éxito")
+        
+        # Reseteamos el estado
+        st.session_state['modo_edicion'] = False
+        st.session_state['id_cotizacion_editar'] = None
+        st.rerun()
+
+    # Botón para cancelar edición
+    if st.button("Cancelar"):
+        st.session_state['modo_edicion'] = False
