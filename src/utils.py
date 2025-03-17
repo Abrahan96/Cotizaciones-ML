@@ -2,16 +2,18 @@ from supabase import create_client, Client
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import tempfile
-import reportlab
+import os
+from dotenv import load_dotenv
 
-
+# Cargar variables de entorno desde .env
+load_dotenv()
 # Clave secreta de Supabase
 SUPABASE_URL = "https://eyemokwxswevabnuldej.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV5ZW1va3d4c3dldmFibnVsZGVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE5Mjg3NjAsImV4cCI6MjA1NzUwNDc2MH0.PrlwMQ4Exxuo1dGfclqmwBDnchRQ_7mQFi1hjiZKcno"
 
-# Conexión
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# Insertar cotización
 def insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, equipo, marca, modelo, fecha, subtotal, igv, total, estado):
     data = {
         "numero_cotizacion": numero_cotizacion,
@@ -29,37 +31,25 @@ def insertar_cotizacion(numero_cotizacion, cliente, ruc, direccion, mecanico, eq
         "estado": estado
     }
     supabase.table("cotizaciones").insert([data]).execute()
-    
+
+# Obtener todas las cotizaciones
 def obtener_cotizaciones():
     response = supabase.table("cotizaciones").select("*").execute()
     return response.data
 
-# ACTUALIZAR COTIZACIÓN
-
+# Actualizar cotización
 def actualizar_cotizacion(id_cotizacion, nuevos_datos):
-    try:
-        print(f"ID de Cotización a actualizar: {id_cotizacion}")
-        print(f"Datos a actualizar: {nuevos_datos}")
+    return supabase.table("cotizaciones").update(nuevos_datos).eq("id", id_cotizacion).execute()
 
-        response = supabase.table("cotizaciones").update(nuevos_datos).eq("id", id_cotizacion).execute()
-
-        print(f"Respuesta de Supabase: {response}")
-        return response
-    except Exception as e:
-        print(f"Error al actualizar la cotización: {e}")
-        return None
-
-# ELIMINAR COTIZACIÓN
+# Eliminar cotización
 def eliminar_cotizacion(id_cotizacion):
-    response = supabase.table("cotizaciones").delete().eq("id", id_cotizacion).execute()
-    return response
+    return supabase.table("cotizaciones").delete().eq("id", id_cotizacion).execute()
 
+# Generar PDF
 def generar_pdf(cotizacion):
-    # Crear un archivo temporal para el PDF
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf")
     file_path = temp_file.name
     
-    # Crear el PDF
     c = canvas.Canvas(file_path, pagesize=letter)
     c.setFont("Helvetica", 12)
     c.drawString(30, 750, "🔧 COTIZACIÓN - MANTENIMIENTO DE MONTACARGAS 🔧")
@@ -78,4 +68,3 @@ def generar_pdf(cotizacion):
     
     c.save()
     return file_path
-
