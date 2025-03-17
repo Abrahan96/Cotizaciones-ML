@@ -1,4 +1,4 @@
-from supabase import supabase
+from supabase_client import supabase
 
 # Insertar cotización
 def insertar_cotizacion(data):
