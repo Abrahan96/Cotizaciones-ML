@@ -1,44 +1,53 @@
-from flask import Flask, request, jsonify, send_file
+import streamlit as st
 from utils import insertar_cotizacion, obtener_cotizaciones, actualizar_cotizacion, eliminar_cotizacion, generar_pdf
 
-app = Flask(__name__)
+st.title("🔧 API de Cotizaciones con Supabase y PDF 📝")
 
-# Ruta para insertar cotización
-@app.route('/insertar', methods=['POST'])
-def insertar():
-    data = request.json
-    insertar_cotizacion(**data)
-    return jsonify({"mensaje": "Cotización insertada con éxito"}), 201
+# 👉 Insertar Cotización
+if st.button("Insertar Cotización"):
+    insertar_cotizacion(
+        numero_cotizacion="ML-0001",
+        cliente="Inversiones SAC",
+        ruc="20603040506",
+        direccion="Av. Industrial 123",
+        mecanico="Juan Pérez",
+        equipo="Montacargas",
+        marca="Toyota",
+        modelo="A30",
+        fecha="2025-03-17",
+        subtotal=1500,
+        igv=270,
+        total=1770,
+        estado="Pendiente"
+    )
+    st.success("✅ Cotización insertada con éxito")
 
-# Ruta para obtener todas las cotizaciones
-@app.route('/cotizaciones', methods=['GET'])
-def obtener():
+# 👉 Mostrar todas las cotizaciones
+if st.button("Ver Cotizaciones"):
     cotizaciones = obtener_cotizaciones()
-    return jsonify(cotizaciones)
+    st.write(cotizaciones)
 
-# Ruta para actualizar cotización
-@app.route('/actualizar/<int:id_cotizacion>', methods=['PUT'])
-def actualizar(id_cotizacion):
-    nuevos_datos = request.json
-    resultado = actualizar_cotizacion(id_cotizacion, nuevos_datos)
-    return jsonify(resultado)
+# 👉 Actualizar cotización
+id_cotizacion = st.number_input("ID de cotización a actualizar", min_value=1)
+if st.button("Actualizar Cotización"):
+    nuevos_datos = {"estado": "Aprobado"}
+    actualizar_cotizacion(id_cotizacion, nuevos_datos)
+    st.success("✅ Cotización actualizada")
 
-# Ruta para eliminar cotización
-@app.route('/eliminar/<int:id_cotizacion>', methods=['DELETE'])
-def eliminar(id_cotizacion):
-    eliminar_cotizacion(id_cotizacion)
-    return jsonify({"mensaje": "Cotización eliminada con éxito"}), 200
+# 👉 Eliminar cotización
+id_eliminar = st.number_input("ID de cotización a eliminar", min_value=1)
+if st.button("Eliminar Cotización"):
+    eliminar_cotizacion(id_eliminar)
+    st.success("✅ Cotización eliminada")
 
-# Ruta para generar PDF
-@app.route('/generar_pdf/<int:id_cotizacion>', methods=['GET'])
-def generar_pdf_cotizacion(id_cotizacion):
+# 👉 Generar PDF de cotización
+id_pdf = st.number_input("ID de cotización para PDF", min_value=1)
+if st.button("Generar PDF"):
     cotizaciones = obtener_cotizaciones()
-    cotizacion = next((c for c in cotizaciones if c['id'] == id_cotizacion), None)
+    cotizacion = next((c for c in cotizaciones if c['id'] == id_pdf), None)
     if cotizacion:
         pdf_path = generar_pdf(cotizacion)
-        return send_file(pdf_path, as_attachment=True)
+        with open(pdf_path, "rb") as pdf_file:
+            st.download_button(label="📄 Descargar PDF", data=pdf_file, file_name="cotizacion.pdf", mime="application/pdf")
     else:
-        return jsonify({"error": "Cotización no encontrada"}), 404
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+        st.error("❌ Cotización no encontrada.")
